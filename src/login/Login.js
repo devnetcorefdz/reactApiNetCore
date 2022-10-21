@@ -1,25 +1,31 @@
 import React from 'react'
 import "./Login.css";
-import logo from "./images/netcore_react.png";
+import logo from "../images/netcore_react.png";
 import { useForm } from 'react-hook-form';
+import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
 
 
 const Login = () => {
 
-  
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,    
     //formState: { errors },
   } = useForm();
 
-  const urlBase = "https://jwtlogin.azurewebsites.net/";
+  const urlBase = "https://jwtlogin.azurewebsites.net/api/";
+  
 
   const onSubmit = (data) => {
     
     //console.log(JSON.stringify(data));
-
-    fetch(urlBase+"api/token", {
+    
+    
+    fetch(urlBase+"token", {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
@@ -29,20 +35,38 @@ const Login = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
-        prompt('',data.token,'');
-        alert("Bienvenido!");
+        
+        if (data.status === 400) {
+          //console.log("Error:", data);
+          toast.error("Datos incorrectos", {
+            duration: 1000,
+            position: "top-center",
+          });
+        } else {
+
+          toast.success("Bienvenido!", {
+            duration: 1000,
+            position: "top-center",
+          });
+          
+          localStorage.setItem("token", data.token);          
+
+          setTimeout(() => {
+            navigate("/");
+            //console.log(data.token)
+          }, 2000);                    
+                    
+        }
+        
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("Datos incorrectos");
+        toast.error("Se ha producido un error", {
+          duration: 2000,
+          position: "top-center",
+        });
       });
-
-      /*
-      fetch("http://fdznet.somee.com/api/productos")
-        .then((response) => response.json())
-        .then((datos) => console.log(datos));        
-      */
+      
   }
   
 
@@ -91,6 +115,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <Toaster />
     </>
   );
 }
