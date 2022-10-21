@@ -1,0 +1,80 @@
+html,
+body {
+    height: 100%;
+}
+
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.form-signin .checkbox {
+    font-weight: 400;
+}
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+
+/*LOGO ANIM*/
+
+.Logo-Anim {
+    height: 15vmin;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .Logo-Anim {
+        animation: Logo-Anim-spin infinite 3s linear;
+    }
+}
+
+@keyframes Logo-Anim-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotateY(360deg);
+    }
+}
+
+
+/*LOGO MENU*/
+
+.Logo-Menu {
+    height: 5vmin;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .Logo-Menu {
+        animation: Logo-Menu-spin infinite 3s linear;
+    }
+}
+
+@keyframes Logo-Menu-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotateY(360deg);
+    }
+}
