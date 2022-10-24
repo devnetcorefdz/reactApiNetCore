@@ -1,4 +1,6 @@
+import axios from "axios";
 import React, { useEffect } from "react";
+
 
 
 const GetProductos = () => {
@@ -10,15 +12,15 @@ const GetProductos = () => {
 
     //console.log(token)
 
-    fetch(urlBase+"productos", {
-      headers: {
-        "Authorization": "Bearer " + token,
-        "Accept": "application/json",
-        "Content-Type": "multipart/form-data",
-      }
-    })
-      .then((response) => response.json())
-      //.then((datos) => console.log(datos));    
+    axios
+      .get(urlBase + "productos", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+      
 
   })
   
@@ -45,7 +47,7 @@ const GetProductos = () => {
           </thead>
           <tbody>
             <tr>
-              <td scope="row"></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

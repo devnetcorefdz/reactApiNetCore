@@ -1,8 +1,22 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import logo from '../images/netcore_react.png'
+import toast, { Toaster } from "react-hot-toast";
 
 const Menu = () => {
+
+  const btnLogOut = () => {
+
+    localStorage.removeItem("token");
+
+    toast.error("Sesion cerrada", {
+      duration: 2000,
+      position: "top-center",
+    });
+
+  }
+
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
@@ -83,7 +97,7 @@ const Menu = () => {
                 </Link>
               </li>
               <li className="nav-item ms-3">
-                <button className="btn btn-danger btn-sm">
+                <button onClick={btnLogOut} className="btn btn-danger btn-sm">
                   CERRRAR SESION
                 </button>
               </li>
@@ -91,6 +105,7 @@ const Menu = () => {
           </div>
         </div>
       </nav>
+      <Toaster />
     </>
   );
 }
