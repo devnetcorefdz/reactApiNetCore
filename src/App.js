@@ -2,7 +2,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import './App.css';
-import Login from "./login/Login";
 import NotFound from "./NotFound";
 import Home from "./menu/pages/Home";
 import Menu from "./menu/Menu";
@@ -21,7 +20,7 @@ function App() {
         <Menu />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route exact path="login" element={<Login />} />
+          
           <Route
             path="inicio"
             element={
