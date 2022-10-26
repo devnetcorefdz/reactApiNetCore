@@ -20,7 +20,7 @@ const Menu = () => {
     setToken(localStorage.getItem('token'))
   }, [token]);
 
-  console.log("token: " + token);
+  //console.log("token: " + token);
 
 
   const btnLogOut = () => {
@@ -131,7 +131,7 @@ const Menu = () => {
               </li>
 
 
-              <li className="nav-item dropdown">
+              <li className="nav-item dropdown me-2 mb-3">
                 <Link
                   className="nav-link dropdown-toggle active"
                   to={"token"}
