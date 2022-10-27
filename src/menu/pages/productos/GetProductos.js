@@ -213,9 +213,9 @@ const GetProductos = () => {
           <Modal.Title>Eliminar producto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-3 p-3">
+          <form onSubmit={handleSubmit(onSubmit)} className="p-3">
             <button
-              className="w-100 btn btn-md btn-danger mt-3 mb-5"
+              className="w-100 btn btn-md btn-danger"
               type="submit"
             >
               Si, eliminar
