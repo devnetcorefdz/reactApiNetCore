@@ -35,7 +35,7 @@ body {
 /*LOGO ANIM*/
 
 .Logo-Anim {
-    height: 15vmin;
+    height: 30vmin;
     pointer-events: none;
 }
 
@@ -59,7 +59,7 @@ body {
 /*LOGO MENU*/
 
 .Logo-Menu {
-    height: 5vmin;
+    height: 10vmin;
     pointer-events: none;
 }
 

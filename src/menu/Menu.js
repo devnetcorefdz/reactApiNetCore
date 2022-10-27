@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../images/netcore_react.png'
-import toast, { Toaster } from "react-hot-toast";
+import { ToastContainer, toast } from "react-toastify";
 import { Button, Modal } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import "../Menu.css";
@@ -15,12 +15,23 @@ const Menu = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const nombre = localStorage.getItem("nombre");
 
   useEffect(() => {
     setToken(localStorage.getItem('token'))
   }, [token]);
 
   //console.log("token: " + token);
+
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    //formState: { errors },
+  } = useForm();
+
+  const urlBase = "https://jwtlogin.azurewebsites.net/api/";
 
 
   const btnLogOut = () => {
@@ -29,28 +40,21 @@ const Menu = () => {
     localStorage.removeItem("token");
 
     toast.error("Sesion cerrada", {
-      duration: 2000,
-      position: "top-center",
+      position: toast.POSITION.BOTTOM_RIGHT,
+      autoClose: 1000,
+      theme: "colored",
     });
+
+    navigate("/");
 
   }
 
-  const navigate = useNavigate();
-
-  const {
-    register,
-    handleSubmit,    
-    //formState: { errors },
-  } = useForm();
-
-  const urlBase = "https://jwtlogin.azurewebsites.net/api/";
   
 
   const onSubmit = (data) => {
     
     //console.log(JSON.stringify(data));
-    
-    
+        
     fetch(urlBase+"token", {
       method: "POST", // or 'PUT'
       headers: {
@@ -65,24 +69,24 @@ const Menu = () => {
         if (data.status === 400) {
           //console.log("Error:", data);
           toast.error("Datos incorrectos", {
-            duration: 1000,
-            position: "top-center",
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: 2000,
+            theme: "colored",
           });
         } else {
 
-          toast.success("Bienvenido!", {
-            duration: 1000,
-            position: "top-center",
+          toast.success("¡ Bienvenido " + data.nombre + " !", {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: 1000,
+            theme: "colored",
           });
           
-          localStorage.setItem("token", data.token);          
-          
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("nombre", data.nombre);
+
           setToken(localStorage.getItem('token'))
-
           handleClose();
-
-          navigate("/");
-          
+          navigate("/productos");          
                     
         }
         
@@ -90,8 +94,9 @@ const Menu = () => {
       .catch((error) => {
         console.error("Error:", error);
         toast.error("Datos incorrectos", {
-          duration: 2000,
-          position: "top-center",
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 2000,
+          theme: "colored",
         });
       });
       
@@ -126,74 +131,104 @@ const Menu = () => {
                 </Link>
               </li>
 
-              <li className="nav-item">
-                <Link className="nav-link active" to={"productos"}>
-                  Productos
-                </Link>
-              </li>
+              {token && (
+                <li className="nav-item">
+                  <Link className="nav-link active" to={"productos"}>
+                    Productos
+                  </Link>
+                </li>
+              )}
 
-
-              {token === undefined || token === null
-                ? 
+              {token === undefined || token === null ? (
                 <>
                   <li className="nav-item ms-3">
-                    <Button className="btn btn-success btn-sm" onClick={handleShow}>
+                    <Button
+                      className="btn btn-success btn-sm"
+                      onClick={handleShow}
+                    >
                       INICIAR SESION
                     </Button>
                   </li>
                 </>
-                : 
+              ) : (
                 <>
-                  <li className="nav-item ms-3">
-                    <button onClick={btnLogOut} className="btn btn-danger btn-sm">
-                      CERRRAR SESION
-                    </button>
+                  <li className="nav-item dropdown">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      id="navbarDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      {nombre}
+                    </a>
+                    <ul
+                      className="dropdown-menu"
+                      aria-labelledby="navbarDropdown"
+                    >
+                      <li>
+                        <Link className="dropdown-item" to={"micuenta"}>
+                          Mi cuenta
+                        </Link>                        
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li className="nav-item ms-3">
+                        <button
+                          onClick={btnLogOut}
+                          className="btn btn-danger btn-sm"
+                        >
+                          CERRRAR SESION
+                        </button>
+                      </li>
+                    </ul>
                   </li>
                 </>
-              }
-                            
+              )}
             </ul>
           </div>
         </div>
       </nav>
-
 
       <Modal show={show} onHide={handleClose} size="sm">
         <Modal.Header closeButton>
           <Modal.Title>Iniciar sesion</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-3 p-3">
-              <div className="form-floating mb-3">
-                <input
-                  type="email"
-                  {...register("email")}
-                  className="form-control"
-                  defaultValue="fede@mail.com"
-                />
-                <label>Email</label>
-              </div>
-              <div className="form-floating">
-                <input
-                  type="password"
-                  {...register("password")}
-                  className="form-control"
-                />
-                <label>Contraseña</label>
-              </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-3 p-3">
+            <div className="form-floating mb-3">
+              <input
+                type="email"
+                {...register("email")}
+                className="form-control"
+                defaultValue="fede@mail.com"
+              />
+              <label>Email</label>
+            </div>
+            <div className="form-floating">
+              <input
+                type="password"
+                {...register("password")}
+                className="form-control"
+              />
+              <label>Contraseña</label>
+            </div>
 
-              <button
-                className="w-100 btn btn-lg btn-success mt-3 mb-5"
-                type="submit"
-              >
-                INGRESAR
-              </button>
-              
-            </form>
-        </Modal.Body>        
+            <input type="hidden" {...register("displayName")} />
+
+            <button
+              className="w-100 btn btn-md btn-success mt-3 mb-5"
+              type="submit"
+            >
+              INGRESAR
+            </button>
+          </form>
+        </Modal.Body>
       </Modal>
 
-      <Toaster />
+      <ToastContainer />
     </>
   );
 }
