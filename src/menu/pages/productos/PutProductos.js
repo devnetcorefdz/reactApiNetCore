@@ -1,37 +1,25 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
+import { useNavigate, useParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import toast, { Toaster } from "react-hot-toast";
 
 
 const PutProductos = () => {
   
   const [data, setData] = useState();
-  const [nombre, setnombre] = useState();
+  const [nombre, setNombre] = useState('');
   const [material, setMaterial] = useState();
   const [categoria, setCategoria] = useState();
+  const [precio, setPrecio] = useState();
+  const [stock, setStock] = useState();
+
   const urlBase = "https://jwtlogin.azurewebsites.net/api/";
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
-
-  const handleNombre = (e) => {
-    console.log(e.target.value);
-  }
-
-  const handleMaterial = () => {
-    
-  }
-
-  const handleCategoria = () => {
-    
-  }
-
-  const handlePrecio = () => {
-    
-  }
-
-  const handleStock = () => {
-    
-  }
+  const { id } = useParams();
 
 
   useEffect(() => {
@@ -39,26 +27,87 @@ const PutProductos = () => {
     //console.log(token)
 
     axios
-      .get(urlBase + "productos", {
+      .get(urlBase + "productos/" + id, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         //console.log(res.data)
+        setNombre(res.data.nombreProducto)
+        setMaterial(res.data.materialProducto)
+        setCategoria(res.data.categoriaProducto)
+        setPrecio(res.data.precioProducto)
+        setStock(res.data.stockProducto)
+
         setData(res.data);
       })
       .catch((err) => console.log(err));
       
 
-  })
+  },[])
+
+
+  const {
+    register,
+    handleSubmit,    
+    //formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    
+    //console.log(JSON.stringify(data));
+    //console.log(token)
+    
+    axios.put(urlBase + 'productos/' + id, JSON.stringify(data),{            
+      headers: {
+      "Content-Type": "application/json",
+      "Content-Security-Policy": "block-all-mixed-content",
+      Authorization: `Bearer ${token}`,      
+      }
+    })
+    .then(function (data) {
+      //console.log(data);
+      
+      if (data.status === 400) {
+        console.log("Error:", data);
+        toast.error("Datos incorrectos", {
+          duration: 1000,
+          position: "top-center",
+        });
+      } else {
+
+        toast.error("Producto modificado!", {
+          duration: 1000,
+          position: "top-center",
+          icon: '👏',
+        });
+                                  
+        
+        setTimeout(() => {
+          navigate("/productos");
+          //console.log(data.token)
+        }, 1000);                    
+        
+      }
+    }).catch(function (error) {
+      console.log(error);      
+      toast.error("Datos incorrectos", {
+        duration: 2000,
+        position: "top-center",
+      });
+    });
+  }
   
 
   return (
     <>
-      <div className="container">
-        <p className="fs-1">Modificar Productos</p>
-        <hr className="col-3 mb-4" />
+      <div className="container text-center">
+
+        <p className="fs-1">Modificar Producto</p>
+        <div className='row justify-content-center'>
+          <hr className="col-4 mb-3" />
+        </div>
 
         {token === undefined || token === null
           ? 
@@ -80,39 +129,103 @@ const PutProductos = () => {
               }
 
               {data && (
-                <table className="table table-bordered text-center">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Producto</th>
-                      <th>Material</th>
-                      <th>Categoria</th>
-                      <th>Precio</th>
-                      <th>Stock</th>
-                      <th>-</th>
-                    </tr>
-                  </thead>
-                  <tbody>                                                                
-                    {data.map((item,x) =>                    
-                      <tr key={x+1}>
-                        <td>{x+1}</td>
-                        <td> <input type="text" className="form-control text-center" onChange={handleNombre} value={item.nombreProducto} /> </td>
-                        <td> <input type="text" className="form-control text-center" onChange={handleMaterial} value={item.materialProducto} /> </td>
-                        <td> <input type="text" className="form-control text-center" onChange={handleCategoria} value={item.categoriaProducto} /> </td>
-                        <td> <input type="text" className="form-control text-center" onChange={handlePrecio} value={item.precioProducto} /> </td>
-                        <td> <input type="text" className="form-control text-center" onChange={handleStock} value={item.stockProducto} /> </td>
-                        <td> <Button variant="warning">Cambiar</Button> </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+                <div className='d-flex justify-content-center'>                
+                    <form onSubmit={handleSubmit(onSubmit)} className="p-3">
+                      <input
+                          type="hidden"
+                          {...register("productoId")}                              
+                          value={id}                  
+                      />
+
+                      <div className="row">
+                        <div className="col">
+                        <div className="form-floating mb-3">
+                        <input
+                          type="text"
+                          {...register("nombreProducto")}
+                          className="form-control"      
+                          value={nombre}
+                          onChange={(e) => {setNombre(e.target.value)}}
+                        />
+                        <label>Producto</label>
+                      </div>
+                        </div>
+                        <div className="col">
+                          <div className="form-floating mb-3">
+                            <input
+                              type="text"
+                              {...register("materialProducto")}
+                              className="form-control"
+                              value={material}
+                              onChange={(e) => {setMaterial(e.target.value)}}
+                            />
+                            <label>Material</label>
+                          </div>
+                        </div>                        
+                      </div>
+
+                      <div className="row">
+                        <div className="col">
+                          <div className="form-floating mb-3">
+                            <input
+                              type="text"
+                              {...register("categoriaProducto")}
+                              className="form-control"
+                              value={categoria}
+                              onChange={(e) => {setCategoria(e.target.value)}}
+                            />
+                            <label>Categoria</label>
+                          </div>
+                        </div>
+                        <div className="col">
+                          <div className="form-floating mb-3">
+                            <input
+                              type="text"
+                              {...register("precioProducto")}
+                              className="form-control" 
+                              value={precio}          
+                              onChange={(e) => {setPrecio(e.target.value)}}             
+                            />
+                            <label>Precio</label>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="row">
+                        <div className="col">
+                          <div className="form-floating">
+                            <input
+                              type="text"
+                              {...register("stockProducto")}
+                              className="form-control"
+                              value={stock}
+                              onChange={(e) => {setStock(e.target.value)}}             
+                            />
+                            <label>Stock</label>
+                          </div>
+                        </div>
+                        <div className="col">
+                          
+                        </div>
+                      </div>
+                      
+  
+                      <button
+                        className="w-100 btn btn-md btn-warning mt-3 mb-5"
+                        type="submit"
+                      >
+                        MODIFICAR
+                      </button>
+                      
+                    </form>
+              </div>
               )}
             </>
         }
         
-
-        
       </div>
+
+      <Toaster/>
     </>
   );
 };

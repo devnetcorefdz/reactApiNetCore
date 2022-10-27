@@ -14,6 +14,18 @@ import Token from "./menu/pages/Token";
 
 
 function App() {
+
+  setTimeout(() => {
+    localStorage.removeItem("token");    
+    console.log("Sesion expirada");
+    window.location.href = "/"
+  }, 3600000);
+  //3.600.000 = 1 hora
+
+  //localStorage.getItem("token") === null && ();
+
+  
+
   return (
     <>
       <Router>
@@ -46,7 +58,7 @@ function App() {
             }
           />
           <Route
-            path="agregarProductos"
+            path="agregarProducto"
             element={
               <>
                 <PostProductos />
@@ -54,7 +66,7 @@ function App() {
             }
           />
           <Route
-            path="modificarProductos"
+            path="modificarProducto/:id"
             element={
               <>
                 <PutProductos />
@@ -62,7 +74,7 @@ function App() {
             }
           />
           <Route
-            path="eliminarProductos"
+            path="eliminarProducto"
             element={
               <>
                 <DeleteProductos />

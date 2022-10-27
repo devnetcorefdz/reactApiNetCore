@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../images/netcore_react.png'
 import toast, { Toaster } from "react-hot-toast";
 import { Button, Modal } from 'react-bootstrap';
@@ -35,7 +35,7 @@ const Menu = () => {
 
   }
 
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -81,12 +81,8 @@ const Menu = () => {
 
           handleClose();
 
-          /*
-          setTimeout(() => {
-            navigate("/");
-            //console.log(data.token)
-          }, 1000);                    
-          */
+          navigate("/");
+          
                     
         }
         
@@ -130,55 +126,12 @@ const Menu = () => {
                 </Link>
               </li>
 
-
-              <li className="nav-item dropdown me-2 mb-3">
-                <Link
-                  className="nav-link dropdown-toggle active"
-                  to={"token"}
-                  id="navbarDropdown"
-                  href="/#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
+              <li className="nav-item">
+                <Link className="nav-link active" to={"productos"}>
                   Productos
                 </Link>
-                <ul
-                  className="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="navbarDropdown"
-                >
-                  <li>
-                    <Link className="dropdown-item" to={"productos"}>
-                      Lista
-                    </Link>
-                  </li>
-                  {token === undefined || token === null
-                    ? 
-                    <>                      
-                    </>
-                    : 
-                    <>
-                      <li>
-                        <Link className="dropdown-item" to={"agregarProductos"}>
-                          Agregar
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item" to={"modificarProductos"}>
-                          Modificar
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item" to={"eliminarProductos"}>
-                          Eliminar
-                        </Link>
-                      </li>
-                    </>
-                  }
-                  
-                </ul>
               </li>
-              
+
 
               {token === undefined || token === null
                 ? 

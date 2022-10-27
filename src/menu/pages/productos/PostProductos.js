@@ -70,9 +70,10 @@ const PostProductos = () => {
   return (
     <>
       <div className="container text-center">
-        <p className="fs-1">Agregar Productos</p>
+        
+        <p className="fs-1">Agregar Producto</p>
         <div className='row justify-content-center'>
-        <hr className="col-4 mb-5" />
+          <hr className="col-4 mb-5" />
         </div>
         
 
@@ -98,22 +99,26 @@ const PostProductos = () => {
                       <label>Producto</label>
                     </div>
 
+                                        
                     <div className="form-floating mb-3">
-                      <input
-                        type="text"
-                        {...register("materialProducto")}
-                        className="form-control"
-                      />
-                      <label>Material</label>
+                      <select className="form-select" {...register("materialProducto")}>
+                        <option selected>Seleccione...</option>
+                        <option value="Hogar">Metal</option>
+                        <option value="Madera">Madera</option>
+                        <option value="Vidrio">Vidrio</option>
+                        <option value="Plastico">Plastico</option>
+                        <option value="Goma">Goma</option>
+                      </select>
+                      <label >Material</label>
                     </div>
-                    
+
+
                     <div className="form-floating mb-3">
-                      <input
-                        type="text"
-                        {...register("categoriaProducto")}
-                        className="form-control"
-                      />
-                      <label>Categoria</label>
+                      <select className="form-select" {...register("categoriaProducto")}>
+                        <option selected>Seleccione...</option>
+                        <option value="Hogar">Hogar</option>                        
+                      </select>
+                      <label >Categoria</label>
                     </div>
 
                     <div className="form-floating mb-3">
