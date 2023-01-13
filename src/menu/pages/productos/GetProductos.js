@@ -10,7 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 const GetProductos = () => {
 
   const [data, setData] = useState();  
-  const urlBase = "https://jwtlogin.azurewebsites.net/api/";
+  const urlBase = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token");
   const [idDelete, setIdDelete] = useState("");
   const navigate = useNavigate();

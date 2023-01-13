@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Button, Modal } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import "../Menu.css";
+import axios from 'axios';
 
 const Menu = () => {
 
@@ -31,8 +32,7 @@ const Menu = () => {
     //formState: { errors },
   } = useForm();
 
-  const urlBase = "https://jwtlogin.azurewebsites.net/api/";
-
+  const urlBase = process.env.REACT_APP_API_URL_TOKEN;
 
   const btnLogOut = () => {
 
@@ -53,13 +53,55 @@ const Menu = () => {
 
   const onSubmit = (data) => {
     
-    //console.log(JSON.stringify(data));
-        
+    //console.log(JSON.stringify(data));    
+    
+    axios
+      .post(urlBase, JSON.stringify(data), {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",          
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        },
+      })
+      .then((response) => response.data)
+      .then((data) => {
+        if (data.status === 400) {
+          //console.log("Error:", data);
+          toast.error("Datos incorrectos", {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: 2000,
+            theme: "colored",
+          });
+        } else {
+          toast.success("¡ Bienvenido " + data.nombre + " !", {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: 1000,
+            theme: "colored",
+          });
+
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("nombre", data.nombre);
+
+          setToken(localStorage.getItem("token"));
+          handleClose();
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.error("Error!! ", error);
+        toast.error("Datos incorrectos", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 2000,
+          theme: "colored",
+        });
+      });
+
+    /*
     fetch(urlBase+"token", {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
-        "Content-Security-Policy": "block-all-mixed-content",
+        //"Content-Security-Policy": "block-all-mixed-content",
       },
       body: JSON.stringify(data),
     })
@@ -86,19 +128,20 @@ const Menu = () => {
 
           setToken(localStorage.getItem('token'))
           handleClose();
-          navigate("/productos");          
+          navigate("/");          
                     
         }
         
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error!! ", error);
         toast.error("Datos incorrectos", {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: 2000,
           theme: "colored",
         });
       });
+      */
       
   }
 
@@ -155,7 +198,7 @@ const Menu = () => {
                   <li className="nav-item dropdown">
                     <a
                       className="nav-link dropdown-toggle"
-                      href="#"
+                      href="/"
                       id="navbarDropdown"
                       role="button"
                       data-bs-toggle="dropdown"
