@@ -32,6 +32,8 @@ const Menu = () => {
     //formState: { errors },
   } = useForm();
 
+  //console.log(process.env.REACT_APP_API_URL_TOKEN);
+
   const urlBase = process.env.REACT_APP_API_URL_TOKEN;
 
   const btnLogOut = () => {

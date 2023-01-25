@@ -10,7 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 const GetProductos = () => {
 
   const [data, setData] = useState();  
-  const urlBase = process.env.REACT_APP_API_URL;
+  const urlBase = "http://apifdz.somee.com/api/productos";//process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token");
   const [idDelete, setIdDelete] = useState("");
   const navigate = useNavigate();
@@ -25,8 +25,8 @@ const GetProductos = () => {
     
 
   useEffect(() => {
-
-    //console.log(token)
+    
+    //console.log(token);
     obtenerProductos();      
 
   },[])
@@ -38,7 +38,7 @@ const GetProductos = () => {
 
   const obtenerProductos = () => {
     axios
-      .get(urlBase + "productos", {
+      .get(urlBase, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -47,7 +47,7 @@ const GetProductos = () => {
         //console.log(res.data)
         setData(res.data);
       })
-      .catch((err) => console.log(err));            
+      .catch((err) => console.log("error: " + err));            
   }
   
 
